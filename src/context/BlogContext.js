@@ -1,14 +1,17 @@
-import React from "react"
+import createDataContext from "./createDataContext";
 
-const BlogContext = React.createContext()
+const blogReducer = (state, action) => {
+    switch (action.type) {
+        case "add_blogPost":
+            return [...state, { title: `Blog Post #${state.length + 1}` }];
 
-export const BlogProvider = ({children}) => {
-    const blogPost = [
-        {title: "Blog post #1"},
-        {title: "Blog post #2"},
-    ]
-    return <BlogContext.Provider>
-        {children}
-    </BlogContext.Provider>
+        default:
+            return state;
+    }
 }
-export default BlogContext
+const addBlogPost = (dispatch) => {
+    return () => {
+        dispatch({ type: "add_blogPost" })
+    }
+}
+export const { Context, Provider } = createDataContext(blogReducer, { addBlogPost }, [])
